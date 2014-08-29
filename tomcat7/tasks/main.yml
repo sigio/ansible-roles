@@ -3,41 +3,41 @@
 
 ---
   - name: Download tomcat tarball
-    get_url: dest=/tmp url={{dlurl}} sha256sum={{shasum}} mode=0440 owner=root group=root
+    get_url: dest=/tmp url={{tomcat7_dlurl}} sha256sum={{tomcat7_shasum}} mode=0440 owner=root group=root
     register: download
 
   - name: Unpack tarball
     when: download|changed
-    command: tar -xvf /tmp/apache-tomcat-{{version}}.tar.gz -C /{{installroot}}
+    command: tar -xvf /tmp/apache-tomcat-{{tomcat7_version}}.tar.gz -C /{{tomcat7_installroot}}
 
   - name: Link tomcat name to correct (versioned) directory
-    file: src=/{{installroot}}/apache-tomcat-{{version}} dest=/{{installroot}}/{{installsymlink}} state=link owner=root group=root
+    file: src=/{{tomcat7_installroot}}/apache-tomcat-{{tomcat7_version}} dest=/{{tomcat7_installroot}}/{{tomcat7_installsymlink}} state=link owner=root group=root
 
-  - name: Set ownership of tomcat directories to {{tomcatuser}}
-    file: dest={{item}} state=directory owner={{tomcatuser}} group={{tomcatgroup}} mode=0755
+  - name: Set ownership of tomcat directories to {{tomcat7_user}}
+    file: dest={{item}} state=directory owner={{tomcat7_user}} group={{tomcat7_group}} mode=0755
     with_items:
-      - /{{installroot}}/{{installsymlink}}/logs
-      - /{{installroot}}/{{installsymlink}}/work
+      - /{{tomcat7_installroot}}/{{tomcat7_installsymlink}}/logs
+      - /{{tomcat7_installroot}}/{{tomcat7_installsymlink}}/work
 
-  - name: Set ownership of tomcat config directories to root:{{tomcatuser}}
-    file: dest={{item}} state=directory owner=root group={{tomcatuser}} mode=0750 recurse=yes
+  - name: Set ownership of tomcat config directories to root:{{tomcat7_user}}
+    file: dest={{item}} state=directory owner=root group={{tomcat7_user}} mode=0750 recurse=yes
     with_items:
-      - /{{installroot}}/{{installsymlink}}/conf/
+      - /{{tomcat7_installroot}}/{{tomcat7_installsymlink}}/conf/
 
   - name: Tomcat init-script
-    template: src=init-tomcat dest=/etc/init.d/tomcat owner=root group=root mode=0755
-    notify: chkconfig-tomcat
+    template: src=init-tomcat7 dest=/etc/init.d/tomcat7 owner=root group=root mode=0755
+    notify: chkconfig-tomcat7
     tags:
       - initscript
     register: initscript
 
   - name: Register initscript
     when: initscript|changed
-    command: chkconfig --add /etc/init.d/tomcat
+    command: chkconfig --add /etc/init.d/tomcat7
     tags:
       - initscript
 
   - name: Enable tomcat service
-    service: name=tomcat enabled=yes
+    service: name=tomcat7 enabled=yes
     tags:
       - initscript

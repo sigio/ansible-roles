@@ -1,10 +1,10 @@
-dlsite: 'http://ftp.nluug.nl/internet/apache/tomcat/tomcat-7/'
-dlurl: '{{ dlsite }}/v{{version}}/bin/apache-tomcat-{{version}}.tar.gz'
-version: '7.0.55'
-shasum: 'c20934fda63bc7311e2d8e067d67f886890c8be72280425c5f6f8fdd7a376c15'
-tomcatuser: tomcat6
-tomcatgroup: tomcat6
-installroot: /opt
-installsymlink: tomcat7
+tomcat7_dlsite: 'http://ftp.nluug.nl/internet/apache/tomcat/tomcat-7/'
+tomcat7_dlurl: '{{ tomcat7_dlsite }}/v{{tomcat7_version}}/bin/apache-tomcat-{{tomcat7_version}}.tar.gz'
+tomcat7_version: '7.0.55'
+tomcat7_shasum: 'c20934fda63bc7311e2d8e067d67f886890c8be72280425c5f6f8fdd7a376c15'
+tomcat7_user: tomcat6
+tomcat7_group: tomcat6
+tomcat7_installroot: /opt
+tomcat7_installsymlink: tomcat7
 
 
