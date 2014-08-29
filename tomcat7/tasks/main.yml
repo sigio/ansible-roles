@@ -19,6 +19,11 @@
       - /{{installroot}}/{{installsymlink}}/logs
       - /{{installroot}}/{{installsymlink}}/work
 
+  - name: Set ownership of tomcat config directories to root:{{tomcatuser}}
+    file: dest={{item}} state=directory owner=root group={{tomcatuser}} mode=0750 recurse=yes
+    with_items:
+      - /{{installroot}}/{{installsymlink}}/conf/
+
   - name: Tomcat init-script
     template: src=init-tomcat dest=/etc/init.d/tomcat owner=root group=root mode=0755
     notify: chkconfig-tomcat
