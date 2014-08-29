@@ -1,0 +1,64 @@
+#!/bin/sh
+# chkconfig: 2345 20 80
+# description: Tomcat Cluster 01
+
+# {{ ansible_managed }}
+
+CATALINA_HOME=/opt/tomcat7/; export CATALINA_HOME
+JAVA_HOME=/opt/java7; export JAVA_HOME
+TOMCAT_OWNER={{tomcatuser}}; export TOMCAT_OWNER
+
+CATALINA_OPTS="-Dwebservice.cache.expiry.days=2"
+CATALINA_PID="/var/run/tomcat/tomcat.pid"
+
+if [ ! -d "/var/run/tomcat" ]; then
+  mkdir -p /var/run/tomcat
+  chown ${TOMCAT_OWNER} /var/run/tomcat
+fi
+
+if [ ! -d "${CATALINA_HOME}/logs" ]; then
+  mkdir -p ${CATALINA_HOME}/logs
+  chown ${TOMCAT_OWNER} ${CATALINA_HOME}/logs
+fi
+
+if [ ! -d "${CATALINA_HOME}/work" ]; then
+  mkdir -p ${CATALINA_HOME}/work
+  chown ${TOMCAT_OWNER} ${CATALINA_HOME}/work
+fi
+
+export CATALINA_OPTS CATALINA_PID
+
+start() {
+        echo -n "Starting Tomcat:  "
+        rm -rf $CATALINA_HOME/logs/*
+        rm -rf $CATALINA_HOME/work/*
+
+        JAVA_OPTS="-server -Xmx2048M -Xms1536M -XX:MaxPermSize=256m -Dfile.encoding=utf8 -Djava.awt.headless=true"
+        export JAVA_OPTS
+        su $TOMCAT_OWNER -c $CATALINA_HOME/bin/startup.sh
+        sleep 2
+}
+stop() {
+        echo -n "Stopping Tomcat: "
+        JAVA_OPTS=""
+        export JAVA_OPTS
+        su $TOMCAT_OWNER -c $CATALINA_HOME/bin/shutdown.sh
+}
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+        sleep 3
+        start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit
+esac

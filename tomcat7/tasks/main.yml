@@ -1,0 +1,38 @@
+# Task to install tomcat7
+#
+
+---
+  - name: Download tomcat tarball
+    get_url: dest=/tmp url={{dlurl}} sha256sum={{shasum}} mode=0440 owner=root group=root
+    register: download
+
+  - name: Unpack tarball
+    when: download|changed
+    command: tar -xvf /tmp/apache-tomcat-{{version}}.tar.gz -C /{{installroot}}
+
+  - name: Link tomcat name to correct (versioned) directory
+    file: src=/{{installroot}}/apache-tomcat-{{version}} dest=/{{installroot}}/{{installsymlink}} state=link owner=root group=root
+
+  - name: Set ownership of tomcat directories to {{tomcatuser}}
+    file: dest={{item}} state=directory owner={{tomcatuser}} mode=0755
+    with_items:
+      - /{{installroot}}/{{installsymlink}}/logs
+      - /{{installroot}}/{{installsymlink}}/work
+
+  - name: Tomcat init-script
+    template: src=init-tomcat dest=/etc/init.d/tomcat owner=root group=root mode=0755
+    notify: chkconfig-tomcat
+    tags:
+      - initscript
+    register: initscript
+
+  - name: Register initscript
+    when: initscript|changed
+    command: chkconfig --add /etc/init.d/tomcat
+    tags:
+      - initscript
+
+  - name: Enable tomcat service
+    service: name=tomcat enabled=yes
+    tags:
+      - initscript

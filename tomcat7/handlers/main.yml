@@ -1,0 +1,4 @@
+---
+- name: chkconfig-tomcat
+  command: chkconfig --add tomcat
+

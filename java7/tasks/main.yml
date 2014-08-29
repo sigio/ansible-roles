@@ -1,0 +1,25 @@
+# Tasks to install java7 in /opt
+
+---
+
+- name: Check presence of jdk release
+  command: ls -ald /opt/jdk{{jdkversion}}_{{jdkpatch}}
+  register: jdkpresent
+  ignore_errors: yes
+
+- name: Copy JDK tarball
+  copy: src=server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz dest=/tmp/jdk.tgz owner=root group=root mode=0644
+  when: "'No such file or directory' in jdkpresent.stderr"
+
+- name: Extract JDK release
+  shell: tar -C /opt -zxvf /tmp/jdk.tgz creates=/opt/jdk{{jdkversion}}_{{jdkpatch}}
+  when: "'No such file or directory' in jdkpresent.stderr"
+
+- name: Remove jdk tarball
+  command: rm /tmp/jdk.tgz
+  when: "'No such file or directory' in jdkpresent.stderr"
+
+- name: Create java7 symlink
+  file: src=/opt/jdk{{jdkversion}}_{{jdkpatch}} dest=/opt/java7 owner=root group=root state=link
+
+
