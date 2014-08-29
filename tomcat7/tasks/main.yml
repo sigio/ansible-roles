@@ -14,7 +14,7 @@
     file: src=/{{installroot}}/apache-tomcat-{{version}} dest=/{{installroot}}/{{installsymlink}} state=link owner=root group=root
 
   - name: Set ownership of tomcat directories to {{tomcatuser}}
-    file: dest={{item}} state=directory owner={{tomcatuser}} mode=0755
+    file: dest={{item}} state=directory owner={{tomcatuser}} group={{tomcatgroup}} mode=0755
     with_items:
       - /{{installroot}}/{{installsymlink}}/logs
       - /{{installroot}}/{{installsymlink}}/work

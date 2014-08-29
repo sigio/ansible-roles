@@ -3,6 +3,7 @@ dlurl: '{{ dlsite }}/v{{version}}/bin/apache-tomcat-{{version}}.tar.gz'
 version: '7.0.55'
 shasum: 'c20934fda63bc7311e2d8e067d67f886890c8be72280425c5f6f8fdd7a376c15'
 tomcatuser: tomcat6
+tomcatgroup: tomcat6
 installroot: /opt
 installsymlink: tomcat7
 
