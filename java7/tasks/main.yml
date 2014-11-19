@@ -7,9 +7,14 @@
   register: jdkpresent
   ignore_errors: yes
 
-- name: Copy JDK tarball
-  copy: src=server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz dest=/tmp/jdk.tgz owner=root group=root mode=0644
+- name: Download JDK
+  command: creates=/tmp/jdk.tgz curl -o /tmp/jdk.tgz --cookie "oraclelicense=accept-securebackup-cookie" -L http://download.oracle.com/otn-pub/java/jdk/{{javaversion}}u{{jdkpatch}}-b01/server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz -x {{ http_proxy }}
   when: "'No such file or directory' in jdkpresent.stderr"
+
+# Just download it... there's a mirror at atom86 (akamai)
+#- name: Copy JDK tarball
+#  copy: src=server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz dest=/tmp/jdk.tgz owner=root group=root mode=0644
+#  when: "'No such file or directory' in jdkpresent.stderr"
 
 - name: Extract JDK release
   shell: tar -C /opt -zxvf /tmp/jdk.tgz creates=/opt/jdk{{jdkversion}}_{{jdkpatch}}
@@ -22,4 +27,5 @@
 - name: Create java7 symlink
   file: src=/opt/jdk{{jdkversion}}_{{jdkpatch}} dest=/opt/java7 owner=root group=root state=link
 
-
+- name: java profile settings
+  copy: src=javaprofile.sh dest=/etc/profile.d/java.sh owner=root group=root mode=0755
