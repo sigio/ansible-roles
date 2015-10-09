@@ -5,7 +5,7 @@
 # {{ ansible_managed }}
 
 CATALINA_HOME={{tomcat7_installroot}}/{{tomcat7_installsymlink}}; export CATALINA_HOME
-JAVA_HOME=/opt/java7; export JAVA_HOME
+JAVA_HOME={{tomcat_java_home | default('/opt/java8')}}; export JAVA_HOME
 TOMCAT_OWNER={{tomcat7_user}}; export TOMCAT_OWNER
 
 CATALINA_OPTS="-Dwebservice.cache.expiry.days=2"
