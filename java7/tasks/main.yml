@@ -8,7 +8,7 @@
   ignore_errors: yes
 
 - name: Download JDK
-  command: creates=/tmp/jdk.tgz curl -o /tmp/jdk.tgz --cookie "oraclelicense=accept-securebackup-cookie" -L http://download.oracle.com/otn-pub/java/jdk/{{javaversion}}u{{jdkpatch}}-b01/server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz -x {{ http_proxy }}
+  command: "creates=/tmp/jdk.tgz curl -o /tmp/jdk.tgz --cookie oraclelicense=accept-securebackup-cookie -L 'http://download.oracle.com/otn-pub/java/jdk/{{javaversion}}u{{jdkpatch}}-b{{javabuild}}/server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz' {% if http_proxy is defined and http_proxy != '' %} -x {{ http_proxy }} {% endif %}"
   when: "'No such file or directory' in jdkpresent.stderr"
 
 # Just download it... there's a mirror at atom86 (akamai)

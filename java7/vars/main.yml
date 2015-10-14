@@ -1,3 +1,4 @@
 jdkversion: 1.7.0
 javaversion: 7
-jdkpatch: 72
+jdkpatch: 79
+javabuild: 15
