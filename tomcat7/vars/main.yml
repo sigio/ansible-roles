@@ -1,6 +1,6 @@
 tomcat7_dlsite: 'http://ftp.nluug.nl/internet/apache/tomcat/tomcat-7/'
-tomcat7_version: '7.0.64'
-tomcat7_shasum: '76c729037f9fd6a0f44fa41c147c4c7291e68f74b79ec474c0bcef8a57661306'
+tomcat7_version: '7.0.65'
+tomcat7_shasum: 'ef0edb1f560702adc4096097ddfba038086d62da77d0b247d927fd326bc637e9'
 tomcat7_dlurl: '{{ tomcat7_dlsite }}/v{{tomcat7_version}}/bin/apache-tomcat-{{tomcat7_version}}.tar.gz'
 tomcat7_user: tomcat6
 tomcat7_group: tomcat6
