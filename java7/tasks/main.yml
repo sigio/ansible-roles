@@ -31,7 +31,7 @@
   copy: src=javaprofile.sh dest=/etc/profile.d/java.sh owner=root group=root mode=0755
 
 - name: Replace JCE policy files with high-crypto versions
-  copy: src=UnlimitedJCEPolicy{{item}} dest=/opt/jdk{{jdkversion}}_{{jdkpatch}}/jre/lib/securiry/{{item}} owner=root group=root
+  copy: src=UnlimitedJCEPolicy/{{item}} dest=/opt/jdk{{jdkversion}}_{{jdkpatch}}/jre/lib/securiry/{{item}} owner=root group=root
   with_items:
     - local_policy.jar
     - US_export_policy.jar
