@@ -11,11 +11,6 @@
   command: "creates=/tmp/jdk.tgz curl -o /tmp/jdk.tgz --cookie oraclelicense=accept-securebackup-cookie -L 'http://download.oracle.com/otn-pub/java/jdk/{{javaversion}}u{{jdkpatch}}-b{{javabuild}}/server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz' {% if http_proxy is defined and http_proxy != '' %} -x {{ http_proxy }} {% endif %}"
   when: "'No such file or directory' in jdkpresent.stderr"
 
-# Just download it... there's a mirror at atom86 (akamai)
-#- name: Copy JDK tarball
-#  copy: src=server-jre-{{javaversion}}u{{jdkpatch}}-linux-x64.tar.gz dest=/tmp/jdk.tgz owner=root group=root mode=0644
-#  when: "'No such file or directory' in jdkpresent.stderr"
-
 - name: Extract JDK release
   shell: tar -C /opt -zxvf /tmp/jdk.tgz creates=/opt/jdk{{jdkversion}}_{{jdkpatch}}
   when: "'No such file or directory' in jdkpresent.stderr"
